@@ -1,34 +1,25 @@
 <?php
-defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 class UsersModel extends Model
 {
-    /**
-     * Paginated user fetch
-     */
-    public function page($search = '', $limit = 5, $page = 1)
+    protected $table = 'users';
+    protected $primaryKey = 'id';
+    protected $allowedFields = ['fname', 'lname', 'email'];
+
+    // Get all users with pagination
+    public function page($q = '', $limit = 5, $offset = 0)
     {
-        $offset = ($page - 1) * $limit;
+        $builder = $this->db->table($this->table);
 
-        $builder = $this->db->table('users');
-
-        if (!empty($search)) {
-            $builder->like('fname', $search);
-            $builder->or_like('lname', $search);
-            $builder->or_like('email', $search);
+        if (!empty($q)) {
+            $builder->like('fname', $q)
+                    ->orLike('lname', $q)
+                    ->orLike('email', $q);
         }
 
+        $total_rows = $builder->countAllResults(false);
         $builder->limit($limit, $offset);
-        $records = $builder->get()->result_array();
-
-        // Count total rows for pagination
-        $countBuilder = $this->db->table('users');
-        if (!empty($search)) {
-            $countBuilder->like('fname', $search);
-            $countBuilder->or_like('lname', $search);
-            $countBuilder->or_like('email', $search);
-        }
-        $total_rows = $countBuilder->count_all_results();
+        $records = $builder->get()->getResultArray();
 
         return [
             'records' => $records,
@@ -36,23 +27,34 @@ class UsersModel extends Model
         ];
     }
 
-    public function insert($data)
-    {
-        return $this->db->table('users')->insert($data);
-    }
-
+    // Find by ID
     public function find($id, $with_deleted = false)
     {
-        return $this->db->table('users')->where('id', $id)->get()->row_array();
+        return $this->db->table($this->table)
+                        ->where($this->primaryKey, $id)
+                        ->get()
+                        ->getRowArray();
     }
 
-    public function update($id, $data)
+    // Insert user
+    public function insertUser($data)
     {
-        return $this->db->table('users')->where('id', $id)->update($data);
+        return $this->db->table($this->table)->insert($data);
     }
 
-    public function delete($id)
+    // Update user
+    public function updateUser($id, $data)
     {
-        return $this->db->table('users')->where('id', $id)->delete();
+        return $this->db->table($this->table)
+                        ->where($this->primaryKey, $id)
+                        ->update($data);
+    }
+
+    // Delete user
+    public function deleteUser($id)
+    {
+        return $this->db->table($this->table)
+                        ->where($this->primaryKey, $id)
+                        ->delete();
     }
 }
