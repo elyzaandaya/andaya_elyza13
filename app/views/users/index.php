@@ -49,11 +49,11 @@
                     <?php if (!empty($users)): ?>
                         <?php foreach ($users as $user): ?>
                             <?php
-                                // works for both array or object data
-                                $id = is_array($user) ? $user['id'] : $user->id;
-                                $fname = is_array($user) ? $user['fname'] : $user->fname;
-                                $lname = is_array($user) ? $user['lname'] : $user->lname;
-                                $email = is_array($user) ? $user['email'] : $user->email;
+                                // Handle both arrays & objects safely
+                                $id = is_array($user) ? ($user['id'] ?? '') : ($user->id ?? '');
+                                $fname = is_array($user) ? ($user['fname'] ?? '') : ($user->fname ?? '');
+                                $lname = is_array($user) ? ($user['lname'] ?? '') : ($user->lname ?? '');
+                                $email = is_array($user) ? ($user['email'] ?? '') : ($user->email ?? '');
                             ?>
                             <tr class="hover:bg-pink-50 transition duration-200 border-b">
                                 <td class="py-3 px-4 font-medium"><?= html_escape($id); ?></td>
