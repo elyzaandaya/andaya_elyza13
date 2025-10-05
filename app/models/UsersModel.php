@@ -2,59 +2,36 @@
 
 class UsersModel extends Model
 {
-    protected $table = 'users';
-    protected $primaryKey = 'id';
-    protected $allowedFields = ['fname', 'lname', 'email'];
+    protected $table = "users";
+    protected $primaryKey = "id";
+    protected $allowedColumns = ["fname", "lname", "email", "created_at"];
 
-    // Get all users with pagination
-    public function page($q = '', $limit = 5, $offset = 0)
+    public function page($q = "", $limit = 5, $page = 1)
     {
-        $builder = $this->db->table($this->table);
+        $offset = ($page - 1) * $limit;
 
+        $db = new Database();
+        $sql = "SELECT * FROM {$this->table}";
+        $params = [];
+
+        // Search filter
         if (!empty($q)) {
-            $builder->like('fname', $q)
-                    ->orLike('lname', $q)
-                    ->orLike('email', $q);
+            $sql .= " WHERE fname LIKE :q OR lname LIKE :q OR email LIKE :q";
+            $params['q'] = "%$q%";
         }
 
-        $total_rows = $builder->countAllResults(false);
-        $builder->limit($limit, $offset);
-        $records = $builder->get()->getResultArray();
+        // Count total rows
+        $count_sql = str_replace("SELECT *", "SELECT COUNT(*) as total", $sql);
+        $count_result = $db->query($count_sql, $params)->get();
+        $total_rows = $count_result ? $count_result->total : 0;
+
+        // Get paginated data
+        $sql .= " LIMIT {$limit} OFFSET {$offset}";
+        $records = $db->query($sql, $params)->getAll();
 
         return [
             'records' => $records,
             'total_rows' => $total_rows
         ];
-    }
-
-    // Find by ID
-    public function find($id, $with_deleted = false)
-    {
-        return $this->db->table($this->table)
-                        ->where($this->primaryKey, $id)
-                        ->get()
-                        ->getRowArray();
-    }
-
-    // Insert user
-    public function insertUser($data)
-    {
-        return $this->db->table($this->table)->insert($data);
-    }
-
-    // Update user
-    public function updateUser($id, $data)
-    {
-        return $this->db->table($this->table)
-                        ->where($this->primaryKey, $id)
-                        ->update($data);
-    }
-
-    // Delete user
-    public function deleteUser($id)
-    {
-        return $this->db->table($this->table)
-                        ->where($this->primaryKey, $id)
-                        ->delete();
     }
 }
