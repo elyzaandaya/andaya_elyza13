@@ -11,10 +11,10 @@ class UsersModel extends Model
         $offset = ($page - 1) * $limit;
 
         $db = new Database();
-        $sql = "SELECT * FROM {$this->table}";
         $params = [];
 
-        // Search filter
+        // Base query
+        $sql = "SELECT * FROM {$this->table}";
         if (!empty($q)) {
             $sql .= " WHERE fname LIKE :q OR lname LIKE :q OR email LIKE :q";
             $params['q'] = "%$q%";
@@ -22,12 +22,14 @@ class UsersModel extends Model
 
         // Count total rows
         $count_sql = str_replace("SELECT *", "SELECT COUNT(*) as total", $sql);
-        $count_result = $db->query($count_sql, $params)->get();
+        $db->query($count_sql, $params);
+        $count_result = $db->get();
         $total_rows = $count_result ? $count_result->total : 0;
 
-        // Get paginated data
-        $sql .= " LIMIT {$limit} OFFSET {$offset}";
-        $records = $db->query($sql, $params)->getAll();
+        // Paginated data
+        $sql .= " LIMIT {$offset}, {$limit}";
+        $db->query($sql, $params);
+        $records = $db->getAll();
 
         return [
             'records' => $records,

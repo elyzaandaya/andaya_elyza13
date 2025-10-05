@@ -1,65 +1,49 @@
 <?php
+defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 class UsersController extends Controller
 {
-    protected $UsersModel;
-
     public function __construct()
     {
-        $this->UsersModel = new UsersModel();
+        parent::__construct();
+        $this->call->model('UsersModel');
     }
 
     public function index()
     {
-        $q = isset($_GET['q']) ? $_GET['q'] : '';
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $records_per_page = 5;
-        $offset = ($page - 1) * $records_per_page;
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-        $all = $this->UsersModel->page($q, $records_per_page, $offset);
+        $result = $this->UsersModel->page($search, 5, $page);
+        $users = $result['records'];
+        $total_rows = $result['total_rows'];
+        $limit = 5;
+        $total_pages = ceil($total_rows / $limit);
 
-        $data['users'] = $all['records'];
-        $data['total_rows'] = $all['total_rows'];
-        $data['page'] = $page;
-        $data['records_per_page'] = $records_per_page;
-        $data['q'] = $q;
-
-        return view('users/index', $data);
+        $this->call->view('users/index', [
+            'users' => $users,
+            'page' => $page,
+            'total_pages' => $total_pages,
+            'search' => $search
+        ]);
     }
 
-    public function add()
+    public function store()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data = [
-                'fname' => $_POST['fname'],
-                'lname' => $_POST['lname'],
-                'email' => $_POST['email']
-            ];
-            $this->UsersModel->insertUser($data);
-            redirect('/');
-        }
-        return view('users/add');
-    }
+        $data = [
+            'fname' => $this->io->post('fname'),
+            'lname' => $this->io->post('lname'),
+            'email' => $this->io->post('email')
+        ];
 
-    public function edit($id)
-    {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data = [
-                'fname' => $_POST['fname'],
-                'lname' => $_POST['lname'],
-                'email' => $_POST['email']
-            ];
-            $this->UsersModel->updateUser($id, $data);
-            redirect('/');
+        if ($this->UsersModel->insert($data)) {
+            redirect('');
         }
-
-        $data['user'] = $this->UsersModel->find($id);
-        return view('users/edit', $data);
     }
 
     public function delete($id)
     {
-        $this->UsersModel->deleteUser($id);
-        redirect('/');
+        $this->UsersModel->delete($id);
+        redirect('');
     }
 }
