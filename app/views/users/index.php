@@ -1,74 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>User List</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Directory</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="<?=base_url();?>public/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="bg-pink-50 flex flex-col items-center py-10">
+<body class="bg-gradient-to-br from-indigo-800 via-purple-900 to-black h-screen font-serif text-white">
 
-    <h1 class="text-3xl font-bold text-pink-700 mb-8">User Management</h1>
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-indigo-800 to-purple-800 shadow-lg z-10 relative">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <h1 class="text-3xl text-white">User Directory</h1>
+    </div>
+  </nav>
 
-    <!-- Search bar -->
-    <form method="get" class="mb-6">
-        <input type="text" name="search" value="<?= html_escape($search ?? ''); ?>"
-            placeholder="Search users..." class="px-4 py-2 border border-pink-300 rounded-xl focus:outline-none">
-        <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-xl hover:bg-pink-600">Search</button>
-    </form>
+  <!-- Main Content -->
+  <div class="max-w-6xl mx-auto mt-10 px-4 z-10 relative">
+    
+    <!-- Add New User Button -->
+    <div class="flex justify-end mb-6">
+      <a href="<?=site_url('users/create')?>"
+          class="inline-flex items-center gap-2 bg-transparent border-2 border-teal-500 text-teal-500 font-semibold px-5 py-3 rounded-lg hover:bg-teal-500 hover:text-white shadow-lg transition-all duration-300">
+          <i class="fa-solid fa-user-plus"></i> Add New User
+      </a>
 
-    <!-- Add new user -->
-    <form method="post" action="<?= site_url('UsersController/store'); ?>" class="mb-8 flex gap-2">
-        <input type="text" name="fname" placeholder="First Name" required class="px-3 py-2 border border-pink-300 rounded-xl">
-        <input type="text" name="lname" placeholder="Last Name" required class="px-3 py-2 border border-pink-300 rounded-xl">
-        <input type="email" name="email" placeholder="Email" required class="px-3 py-2 border border-pink-300 rounded-xl">
-        <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-xl hover:bg-pink-600">Add</button>
-    </form>
-
-    <!-- Table -->
-    <div class="overflow-x-auto w-3/4 bg-white rounded-2xl shadow-md">
-        <table class="min-w-full text-center border border-pink-200">
-            <thead class="bg-pink-100 text-pink-700">
-                <tr>
-                    <th class="py-3 px-4">ID</th>
-                    <th class="py-3 px-4">First Name</th>
-                    <th class="py-3 px-4">Last Name</th>
-                    <th class="py-3 px-4">Email</th>
-                    <th class="py-3 px-4">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($users)): ?>
-                    <?php foreach ($users as $user): ?>
-                        <tr class="hover:bg-pink-50 border-b">
-                            <td class="py-3 px-4"><?= html_escape($user['id']); ?></td>
-                            <td class="py-3 px-4"><?= html_escape($user['fname']); ?></td>
-                            <td class="py-3 px-4"><?= html_escape($user['lname']); ?></td>
-                            <td class="py-3 px-4"><?= html_escape($user['email']); ?></td>
-                            <td class="py-3 px-4">
-                                <a href="<?= site_url('UsersController/delete/'.$user['id']); ?>"
-                                   class="bg-pink-500 text-white px-3 py-1 rounded-xl hover:bg-pink-600"
-                                   onclick="return confirm('Are you sure you want to delete this user?')">
-                                   Delete
-                                </a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="5" class="py-3 text-gray-500">No users found</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
     </div>
 
-    <!-- Pagination -->
-    <div class="mt-6 flex justify-center gap-2">
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-            <a href="?page=<?= $i; ?>&search=<?= urlencode($search ?? ''); ?>"
-               class="px-3 py-2 rounded-lg <?= $i == $page ? 'bg-pink-500 text-white' : 'bg-pink-200 hover:bg-pink-300'; ?>">
-               <?= $i; ?>
-            </a>
-        <?php endfor; ?>
+    <!-- User Table -->
+    <div class="overflow-x-auto bg-black/50 backdrop-blur-lg rounded-lg shadow-lg p-6">
+      <table class="w-full text-center text-sm text-gray-200 border-collapse">
+        <thead class="bg-gradient-to-r from-indigo-700 to-purple-700">
+          <tr>
+            <th class="py-3 px-4 font-semibold text-white">ID</th>
+            <th class="py-3 px-4 font-semibold text-white">First Name</th>
+            <th class="py-3 px-4 font-semibold text-white">Last Name</th>
+            <th class="py-3 px-4 font-semibold text-white">Email</th>
+            <th class="py-3 px-4 font-semibold text-white">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-black/30">
+          <?php foreach(html_escape($users) as $user): ?>
+            <tr class="hover:bg-indigo-600 transition duration-200">
+              <td class="py-3 px-4"><?=($user['id']);?></td>
+              <td class="py-3 px-4"><?=($user['first_name']);?></td>
+              <td class="py-3 px-4"><?=($user['last_name']);?></td>
+              <td class="py-3 px-4"><?=($user['email']);?></td>
+              <td class="py-3 px-4 flex justify-center gap-4">
+                <!-- Update Button (Transparent) -->
+                <a href="<?=site_url('users/update/'.$user['id']);?>" 
+                   class="inline-flex items-center gap-1 bg-transparent border-2 border-yellow-500 text-yellow-500 font-medium px-4 py-2 rounded-lg hover:bg-yellow-500 hover:text-white transition duration-300">
+                   <i class="fa-solid fa-pen-to-square text-lg"></i>
+                   Update
+                </a>
+                
+                <!-- Delete Button (Transparent) -->
+                <a href="<?=site_url('users/delete/'.$user['id']);?>" 
+                   class="inline-flex items-center gap-1 bg-transparent border-2 border-red-500 text-red-500 font-medium px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white transition duration-300">
+                   <i class="fa-solid fa-trash text-lg"></i>
+                   Delete
+                </a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
-
+  </div>
 </body>
 </html>
