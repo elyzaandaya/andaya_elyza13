@@ -2,38 +2,29 @@
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 class UsersController extends Controller {
-
     public function __construct()
     {
         parent::__construct();
-        // ✅ Load the model and pagination library
         $this->call->model('UsersModel');
         $this->call->library('pagination');
     }
 
     public function index()
     {
-        // Current page number
-        $page = 1;
-        if (isset($_GET['page']) && !empty($_GET['page'])) {
-            $page = $this->io->get('page');
-        }
+        // Current page
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
-        // Search query (optional)
-        $q = '';
-        if (isset($_GET['q']) && !empty($_GET['q'])) {
-            $q = trim($this->io->get('q'));
-        }
+        // Search query
+        $q = isset($_GET['q']) ? trim($this->io->get('q')) : '';
 
-        // Number of records per page
         $records_per_page = 5;
 
-        // Get users data and total record count from model
+        // Fetch paginated users
         $all = $this->UsersModel->page($q, $records_per_page, $page);
         $data['users'] = $all['records'];
         $total_rows = $all['total_rows'];
 
-        // ✅ Initialize Pagination
+        // Pagination setup
         $this->pagination->set_options([
             'first_link'     => '⏮ First',
             'last_link'      => 'Last ⏭',
@@ -43,8 +34,6 @@ class UsersController extends Controller {
         ]);
 
         $this->pagination->set_theme('default');
-
-        // Initialize pagination settings
         $this->pagination->initialize(
             $total_rows,
             $records_per_page,
@@ -52,10 +41,10 @@ class UsersController extends Controller {
             site_url() . '?q=' . urlencode($q)
         );
 
-        // Generate pagination links
-        $data['page'] = $this->pagination->paginate();
+        // Pass pagination links to view
+        $data['pager'] = $this->pagination->paginate();
 
-        // Load the view
+        // Load view
         $this->call->view('users/index', $data);
     }
 
