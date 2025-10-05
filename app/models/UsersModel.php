@@ -1,17 +1,23 @@
 <?php
-defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
-/**
- * Model: UsersModel
- * 
- * Automatically generated via CLI.
- */
-class UsersModel extends Model {
-    protected $table = 'students';
-    protected $primary_key = 'id';
+namespace App\Models;
 
-    public function __construct()
+use LavaLust\Database\Model;
+
+class UsersModel extends Model
+{
+    protected $table = 'users';
+    protected $primaryKey = 'id';
+    protected $allowedColumns = ['fname', 'lname', 'email'];
+
+    public function getAllUsers($search = '')
     {
-        parent::__construct();
+        $builder = $this->db->table($this->table);
+        if (!empty($search)) {
+            $builder->like('fname', $search)
+                    ->orLike('lname', $search)
+                    ->orLike('email', $search);
+        }
+        return $builder->get()->getResultArray();
     }
 }

@@ -1,100 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/assets/css/app.css">
 </head>
-<body class="bg-pink-50 flex flex-col min-h-screen">
+<body style="background-color: #ffe6f2; font-family: Arial;">
+    <div style="max-width: 900px; margin: 50px auto; background: #fff0f6; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px #f8cde0;">
+        <h2 style="text-align:center; color:#e75480;">User Management</h2>
 
-    <div class="container mx-auto px-6 py-10 flex-1">
-        <h1 class="text-4xl font-extrabold text-center text-pink-600 mb-8">User Management</h1>
+        <form method="GET" style="text-align:center; margin-bottom: 15px;">
+            <input type="text" name="search" value="<?= $search ?>" placeholder="Search name..." style="padding:5px;">
+            <button type="submit" style="background:#e75480; color:white; border:none; padding:6px 10px; border-radius:5px;">Search</button>
+            <button type="button" onclick="openModal()" style="background:#ff99c8; color:white; border:none; padding:6px 10px; border-radius:5px;">+ Add User</button>
+        </form>
 
-        <!-- Search Bar and Add Button -->
-        <div class="flex justify-between mb-6">
-            <form method="get" action="<?= site_url(); ?>" class="flex gap-2">
-                <input 
-                    type="text" 
-                    name="q" 
-                    placeholder="Search user..." 
-                    value="<?= isset($_GET['q']) ? html_escape($_GET['q']) : ''; ?>"
-                    class="border border-pink-300 rounded-lg px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                <button 
-                    type="submit" 
-                    class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg shadow">
-                    🔍 Search
-                </button>
-            </form>
-
-            <a href="<?= site_url('users/create'); ?>" 
-               class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg shadow">
-                ➕ Add User
-            </a>
-        </div>
-
-        <!-- User Table -->
-        <div class="overflow-x-auto shadow-lg rounded-lg bg-white">
-            <table class="min-w-full border-collapse">
-                <thead class="bg-pink-200 text-pink-900">
-                    <tr>
-                        <th class="py-3 px-4 text-left font-semibold">ID</th>
-                        <th class="py-3 px-4 text-left font-semibold">First Name</th>
-                        <th class="py-3 px-4 text-left font-semibold">Last Name</th>
-                        <th class="py-3 px-4 text-left font-semibold">Email</th>
-                        <th class="py-3 px-4 text-center font-semibold">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700 text-base">
-                    <?php if (!empty($users)): ?>
-                        <?php foreach ($users as $user): ?>
-                            <?php
-                                // Handle both arrays & objects safely
-                                $id = is_array($user) ? ($user['id'] ?? '') : ($user->id ?? '');
-                                $fname = is_array($user) ? ($user['fname'] ?? '') : ($user->fname ?? '');
-                                $lname = is_array($user) ? ($user['lname'] ?? '') : ($user->lname ?? '');
-                                $email = is_array($user) ? ($user['email'] ?? '') : ($user->email ?? '');
-                            ?>
-                            <tr class="hover:bg-pink-50 transition duration-200 border-b">
-                                <td class="py-3 px-4 font-medium"><?= html_escape($id); ?></td>
-                                <td class="py-3 px-4"><?= html_escape($fname); ?></td>
-                                <td class="py-3 px-4"><?= html_escape($lname); ?></td>
-                                <td class="py-3 px-4"><?= html_escape($email); ?></td>
-                                <td class="py-3 px-4 flex justify-center gap-3">
-                                    <a href="<?= site_url('users/update/' . $id); ?>"
-                                       class="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded-xl shadow">
-                                       ✏️ Edit
-                                    </a>
-                                    <a href="<?= site_url('users/delete/' . $id); ?>"
-                                       onclick="return confirm('Are you sure you want to delete this user?');"
-                                       class="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-xl shadow">
-                                       🗑️ Delete
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5" class="text-center py-4 text-gray-500">No users found.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="mt-6 text-center">
-            <?php if (!empty($page)): ?>
-                <div class="inline-block bg-white px-4 py-2 rounded-lg shadow">
-                    <?= $page; ?>
-                </div>
-            <?php endif; ?>
-        </div>
+        <table border="1" width="100%" style="border-collapse:collapse; text-align:center;">
+            <thead style="background-color:#ffcce0;">
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($users as $u): ?>
+                <tr>
+                    <td><?= $u['id'] ?></td>
+                    <td><?= htmlspecialchars($u['fname']) ?></td>
+                    <td><?= htmlspecialchars($u['lname']) ?></td>
+                    <td><?= htmlspecialchars($u['email']) ?></td>
+                    <td>
+                        <button onclick="editUser(<?= $u['id'] ?>, '<?= $u['fname'] ?>', '<?= $u['lname'] ?>', '<?= $u['email'] ?>')" style="background:#ff99c8; color:white; border:none; padding:5px 10px;">Edit</button>
+                        <a href="/UsersController/delete/<?= $u['id'] ?>" style="background:#ff4d6d; color:white; border:none; padding:5px 10px; border-radius:5px; text-decoration:none;">Delete</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
 
-    <footer class="bg-pink-200 py-4 text-center text-pink-800 text-sm shadow-inner">
-        LavaLust Framework – 2025 | Styled with 💖 by Elyza
-    </footer>
+    <!-- MODAL FORM -->
+    <div id="userModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); justify-content:center; align-items:center;">
+        <form method="POST" action="/UsersController/save" style="background:#fff; padding:20px; border-radius:10px; width:300px;">
+            <h3 style="color:#e75480; text-align:center;">Add/Edit User</h3>
+            <input type="hidden" name="id" id="userId">
+            <input type="text" name="fname" id="fname" placeholder="First Name" required style="width:100%; margin:5px 0; padding:5px;"><br>
+            <input type="text" name="lname" id="lname" placeholder="Last Name" required style="width:100%; margin:5px 0; padding:5px;"><br>
+            <input type="email" name="email" id="email" placeholder="Email" required style="width:100%; margin:5px 0; padding:5px;"><br>
+            <div style="text-align:center;">
+                <button type="submit" style="background:#e75480; color:white; border:none; padding:5px 10px; border-radius:5px;">Save</button>
+                <button type="button" onclick="closeModal()" style="background:#999; color:white; border:none; padding:5px 10px; border-radius:5px;">Cancel</button>
+            </div>
+        </form>
+    </div>
 
+    <script>
+        const modal = document.getElementById('userModal');
+        function openModal() {
+            document.getElementById('userId').value = '';
+            document.getElementById('fname').value = '';
+            document.getElementById('lname').value = '';
+            document.getElementById('email').value = '';
+            modal.style.display = 'flex';
+        }
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+        function editUser(id, fname, lname, email) {
+            document.getElementById('userId').value = id;
+            document.getElementById('fname').value = fname;
+            document.getElementById('lname').value = lname;
+            document.getElementById('email').value = email;
+            modal.style.display = 'flex';
+        }
+    </script>
 </body>
 </html>
