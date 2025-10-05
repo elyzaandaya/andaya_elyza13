@@ -46,16 +46,16 @@
                     <?php if (!empty($users)): ?>
                         <?php foreach ($users as $user): ?>
                             <tr class="hover:bg-pink-50 transition duration-200">
-                                <td class="py-3 px-4 font-medium"><?= $user->id; ?></td>
-                                <td class="py-3 px-4"><?= $user->fname; ?></td>
-                                <td class="py-3 px-4"><?= $user->lname; ?></td>
-                                <td class="py-3 px-4"><?= $user->email; ?></td>
+                                <td class="py-3 px-4 font-medium"><?= html_escape($user['id']); ?></td>
+                                <td class="py-3 px-4"><?= html_escape($user['fname']); ?></td>
+                                <td class="py-3 px-4"><?= html_escape($user['lname']); ?></td>
+                                <td class="py-3 px-4"><?= html_escape($user['email']); ?></td>
                                 <td class="py-3 px-4 flex justify-center gap-3">
-                                    <a href="<?= site_url('users/update/' . $user->id); ?>"
+                                    <a href="<?= site_url('users/update/' . $user['id']); ?>"
                                        class="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded-xl shadow">
                                        ✏️ Edit
                                     </a>
-                                    <a href="<?= site_url('users/delete/' . $user->id); ?>"
+                                    <a href="<?= site_url('users/delete/' . $user['id']); ?>"
                                        class="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-xl shadow"
                                        onclick="return confirm('Are you sure you want to delete this user?');">
                                        🗑 Delete
