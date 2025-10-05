@@ -2,69 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>User List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-pink-50 font-sans">
-    <div class="container mx-auto mt-10 px-4">
-        <h1 class="text-3xl font-bold text-center text-pink-600 mb-6">User Management</h1>
+<body class="bg-pink-50 flex flex-col items-center py-10">
 
-        <div class="flex justify-between items-center mb-4">
-            <form method="GET" action="<?= site_url(); ?>" class="flex space-x-2">
-                <input type="text" name="q" placeholder="Search user..." value="<?= isset($_GET['q']) ? html_escape($_GET['q']) : ''; ?>" class="px-3 py-2 border rounded-lg w-64 focus:ring-pink-300 focus:border-pink-400">
-                <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg shadow">🔍 Search</button>
-            </form>
+    <h1 class="text-3xl font-bold text-pink-700 mb-8">User Management</h1>
 
-            <a href="<?= site_url('users/create'); ?>" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg shadow flex items-center">
-                ➕ Add User
-            </a>
-        </div>
+    <!-- Search bar -->
+    <form method="get" class="mb-6">
+        <input type="text" name="search" value="<?= html_escape($search ?? ''); ?>"
+            placeholder="Search users..." class="px-4 py-2 border border-pink-300 rounded-xl focus:outline-none">
+        <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-xl hover:bg-pink-600">Search</button>
+    </form>
 
-        <div class="bg-white rounded-xl shadow overflow-hidden">
-            <table class="min-w-full text-left border-collapse">
-                <thead class="bg-pink-200">
-                    <tr>
-                        <th class="py-3 px-4">ID</th>
-                        <th class="py-3 px-4">First Name</th>
-                        <th class="py-3 px-4">Last Name</th>
-                        <th class="py-3 px-4">Email</th>
-                        <th class="py-3 px-4 text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700 text-base">
-                    <?php if (!empty($users)): ?>
-                        <?php foreach ($users as $user): ?>
-                            <?php
-                                $id = $user['id'] ?? '';
-                                $fname = $user['fname'] ?? '';
-                                $lname = $user['lname'] ?? '';
-                                $email = $user['email'] ?? '';
-                            ?>
-                            <tr class="hover:bg-pink-50 transition duration-200 border-b">
-                                <td class="py-3 px-4 font-medium"><?= html_escape($id); ?></td>
-                                <td class="py-3 px-4"><?= html_escape($fname); ?></td>
-                                <td class="py-3 px-4"><?= html_escape($lname); ?></td>
-                                <td class="py-3 px-4"><?= html_escape($email); ?></td>
-                                <td class="py-3 px-4 flex justify-center gap-3">
-                                    <a href="<?= site_url('users/update/' . $id); ?>" class="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded-xl shadow">✏️ Edit</a>
-                                    <a href="<?= site_url('users/delete/' . $id); ?>" class="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-xl shadow" onclick="return confirm('Delete this user?');">🗑 Delete</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5" class="text-center py-4 text-gray-500">No users found.</td>
+    <!-- Add new user -->
+    <form method="post" action="<?= site_url('UsersController/store'); ?>" class="mb-8 flex gap-2">
+        <input type="text" name="fname" placeholder="First Name" required class="px-3 py-2 border border-pink-300 rounded-xl">
+        <input type="text" name="lname" placeholder="Last Name" required class="px-3 py-2 border border-pink-300 rounded-xl">
+        <input type="email" name="email" placeholder="Email" required class="px-3 py-2 border border-pink-300 rounded-xl">
+        <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-xl hover:bg-pink-600">Add</button>
+    </form>
+
+    <!-- Table -->
+    <div class="overflow-x-auto w-3/4 bg-white rounded-2xl shadow-md">
+        <table class="min-w-full text-center border border-pink-200">
+            <thead class="bg-pink-100 text-pink-700">
+                <tr>
+                    <th class="py-3 px-4">ID</th>
+                    <th class="py-3 px-4">First Name</th>
+                    <th class="py-3 px-4">Last Name</th>
+                    <th class="py-3 px-4">Email</th>
+                    <th class="py-3 px-4">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($users)): ?>
+                    <?php foreach ($users as $user): ?>
+                        <tr class="hover:bg-pink-50 border-b">
+                            <td class="py-3 px-4"><?= html_escape($user['id']); ?></td>
+                            <td class="py-3 px-4"><?= html_escape($user['fname']); ?></td>
+                            <td class="py-3 px-4"><?= html_escape($user['lname']); ?></td>
+                            <td class="py-3 px-4"><?= html_escape($user['email']); ?></td>
+                            <td class="py-3 px-4">
+                                <a href="<?= site_url('UsersController/delete/'.$user['id']); ?>"
+                                   class="bg-pink-500 text-white px-3 py-1 rounded-xl hover:bg-pink-600"
+                                   onclick="return confirm('Are you sure you want to delete this user?')">
+                                   Delete
+                                </a>
+                            </td>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <?php if (!empty($pager)): ?>
-            <div class="mt-6 flex justify-center">
-                <?= $pager; ?>
-            </div>
-        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr><td colspan="5" class="py-3 text-gray-500">No users found</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
+
+    <!-- Pagination -->
+    <div class="mt-6 flex justify-center gap-2">
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <a href="?page=<?= $i; ?>&search=<?= urlencode($search ?? ''); ?>"
+               class="px-3 py-2 rounded-lg <?= $i == $page ? 'bg-pink-500 text-white' : 'bg-pink-200 hover:bg-pink-300'; ?>">
+               <?= $i; ?>
+            </a>
+        <?php endfor; ?>
+    </div>
+
 </body>
 </html>

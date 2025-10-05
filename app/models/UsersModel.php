@@ -1,33 +1,36 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
-class UsersModel extends Model {
-
+class UsersModel extends Model
+{
     /**
-     * Paginate and search users.
+     * Get paginated users
      */
     public function page($search = '', $limit = 5, $page = 1)
     {
         $offset = ($page - 1) * $limit;
 
-        // Apply search filters
+        // Build main query
+        $this->db->from('users');
+
         if (!empty($search)) {
             $this->db->like('fname', $search);
             $this->db->or_like('lname', $search);
             $this->db->or_like('email', $search);
         }
 
-        // Get limited records
-        $query = $this->db->limit($limit, $offset)->get('users');
+        $this->db->limit($limit, $offset);
+        $query = $this->db->get();
         $records = $query->result_array();
 
-        // Count total rows for pagination
+        // Count total
+        $this->db->from('users');
         if (!empty($search)) {
             $this->db->like('fname', $search);
             $this->db->or_like('lname', $search);
             $this->db->or_like('email', $search);
         }
-        $total_rows = $this->db->count_all_results('users');
+        $total_rows = $this->db->count_all_results();
 
         return [
             'records' => $records,
@@ -36,7 +39,7 @@ class UsersModel extends Model {
     }
 
     /**
-     * Insert new user.
+     * Insert a new user
      */
     public function insert($data)
     {
@@ -44,8 +47,7 @@ class UsersModel extends Model {
     }
 
     /**
-     * Find a single user by ID.
-     * Compatible with Model::find($id, $with_deleted = false)
+     * Find by ID (fixed signature)
      */
     public function find($id, $with_deleted = false)
     {
@@ -53,7 +55,7 @@ class UsersModel extends Model {
     }
 
     /**
-     * Update user by ID.
+     * Update user
      */
     public function update($id, $data)
     {
@@ -61,7 +63,7 @@ class UsersModel extends Model {
     }
 
     /**
-     * Delete user by ID.
+     * Delete user
      */
     public function delete($id)
     {
