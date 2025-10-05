@@ -1,49 +1,115 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
-class UsersController extends Controller
-{
+class UsersController extends Controller {
+
     public function __construct()
     {
         parent::__construct();
+        // ✅ Load the model and pagination library
         $this->call->model('UsersModel');
+        $this->call->library('pagination');
     }
 
     public function index()
     {
-        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        // Current page number
+        $page = 1;
+        if (isset($_GET['page']) && !empty($_GET['page'])) {
+            $page = $this->io->get('page');
+        }
 
-        $result = $this->UsersModel->page($search, 5, $page);
-        $users = $result['records'];
-        $total_rows = $result['total_rows'];
-        $limit = 5;
-        $total_pages = ceil($total_rows / $limit);
+        // Search query (optional)
+        $q = '';
+        if (isset($_GET['q']) && !empty($_GET['q'])) {
+            $q = trim($this->io->get('q'));
+        }
 
-        $this->call->view('users/index', [
-            'users' => $users,
-            'page' => $page,
-            'total_pages' => $total_pages,
-            'search' => $search
+        // Number of records per page
+        $records_per_page = 5;
+
+        // Get users data and total record count from model
+        $all = $this->UsersModel->page($q, $records_per_page, $page);
+        $data['users'] = $all['records'];
+        $total_rows = $all['total_rows'];
+
+        // ✅ Initialize Pagination
+        $this->pagination->set_options([
+            'first_link'     => '⏮ First',
+            'last_link'      => 'Last ⏭',
+            'next_link'      => 'Next →',
+            'prev_link'      => '← Prev',
+            'page_delimiter' => '&page='
         ]);
+
+        $this->pagination->set_theme('default');
+
+        // Initialize pagination settings
+        $this->pagination->initialize(
+            $total_rows,
+            $records_per_page,
+            $page,
+            site_url() . '?q=' . urlencode($q)
+        );
+
+        // Generate pagination links
+        $data['page'] = $this->pagination->paginate();
+
+        // Load the view
+        $this->call->view('users/index', $data);
     }
 
-    public function store()
+    public function create()
     {
-        $data = [
-            'fname' => $this->io->post('fname'),
-            'lname' => $this->io->post('lname'),
-            'email' => $this->io->post('email')
-        ];
+        if ($this->io->method() == 'post') {
+            $data = [
+                'fname' => $this->io->post('fname'),
+                'lname' => $this->io->post('lname'),
+                'email' => $this->io->post('email')
+            ];
 
-        if ($this->UsersModel->insert($data)) {
-            redirect('');
+            if ($this->UsersModel->insert($data)) {
+                redirect(site_url());
+            } else {
+                echo "Error in creating user.";
+            }
+        } else {
+            $this->call->view('users/create');
+        }
+    }
+
+    public function update($id)
+    {
+        $user = $this->UsersModel->find($id);
+        if (!$user) {
+            echo "User not found.";
+            return;
+        }
+
+        if ($this->io->method() == 'post') {
+            $data = [
+                'fname' => $this->io->post('fname'),
+                'lname' => $this->io->post('lname'),
+                'email' => $this->io->post('email')
+            ];
+
+            if ($this->UsersModel->update($id, $data)) {
+                redirect(site_url());
+            } else {
+                echo "Error in updating information.";
+            }
+        } else {
+            $data['user'] = $user;
+            $this->call->view('users/update', $data);
         }
     }
 
     public function delete($id)
     {
-        $this->UsersModel->delete($id);
-        redirect('');
+        if ($this->UsersModel->delete($id)) {
+            redirect(site_url());
+        } else {
+            echo "Error in deleting user.";
+        }
     }
 }
