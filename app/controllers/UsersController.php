@@ -7,31 +7,28 @@ class UsersController extends Controller {
     {
         parent::__construct();
 
-        // Load the model
+        // Load model
         $this->call->model('UsersModel');
 
-        // ✅ Load and assign the Pagination library
-        $this->pagination = $this->call->library('pagination');
+        // ✅ Properly load the Pagination library
+        $this->call->library('pagination');
+        $this->pagination = new Pagination();
     }
 
     public function index()
     {
-        // Current page
         $page = 1;
         if (isset($_GET['page']) && !empty($_GET['page'])) {
             $page = $this->io->get('page');
         }
 
-        // Search query
         $q = '';
         if (isset($_GET['q']) && !empty($_GET['q'])) {
             $q = trim($this->io->get('q'));
         }
 
-        // Records per page
         $records_per_page = 5;
 
-        // Fetch paginated user data
         $all = $this->UsersModel->page($q, $records_per_page, $page);
         $data['users'] = $all['records'];
         $total_rows = $all['total_rows'];
@@ -45,10 +42,8 @@ class UsersController extends Controller {
             'page_delimiter' => '&page='
         ]);
 
-        // Use default theme
         $this->pagination->set_theme('default');
 
-        // Initialize pagination
         $this->pagination->initialize(
             $total_rows,
             $records_per_page,
@@ -56,14 +51,11 @@ class UsersController extends Controller {
             site_url() . '?q=' . urlencode($q)
         );
 
-        // Generate pagination links
         $data['page'] = $this->pagination->paginate();
 
-        // Load the users index view
         $this->call->view('users/index', $data);
     }
 
-    // ✅ Create new user
     public function create()
     {
         if ($this->io->method() == 'post') {
@@ -76,14 +68,13 @@ class UsersController extends Controller {
             if ($this->UsersModel->insert($data)) {
                 redirect(site_url());
             } else {
-                echo "Error in creating user.";
+                echo "Error creating user.";
             }
         } else {
             $this->call->view('users/create');
         }
     }
 
-    // ✅ Update user info
     public function update($id)
     {
         $user = $this->UsersModel->find($id);
@@ -102,7 +93,7 @@ class UsersController extends Controller {
             if ($this->UsersModel->update($id, $data)) {
                 redirect(site_url());
             } else {
-                echo "Error in updating information.";
+                echo "Error updating user.";
             }
         } else {
             $data['user'] = $user;
@@ -110,13 +101,12 @@ class UsersController extends Controller {
         }
     }
 
-    // ✅ Delete user
     public function delete($id)
     {
         if ($this->UsersModel->delete($id)) {
             redirect(site_url());
         } else {
-            echo "Error in deleting user.";
+            echo "Error deleting user.";
         }
     }
 }
