@@ -10,13 +10,13 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+      background: linear-gradient(135deg, #f9fafb, #e0f2fe);
     }
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center px-4">
 
-  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg border border-blue-200">
+  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg border border-gray-200">
 
     <!-- Header -->
     <div class="text-center mb-6">
@@ -32,19 +32,19 @@
       <div>
         <label class="block text-sm font-medium text-gray-700">First Name</label>
         <input type="text" name="first_name" value="<?= html_escape($user['first_name'])?>" required
-               class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
+               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
       </div>
 
       <div>
         <label class="block text-sm font-medium text-gray-700">Last Name</label>
         <input type="text" name="last_name" value="<?= html_escape($user['last_name'])?>" required
-               class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
+               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
       </div>
 
       <div>
         <label class="block text-sm font-medium text-gray-700">Email</label>
         <input type="email" name="email" value="<?= html_escape($user['email'])?>" required
-               class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
+               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
       </div>
 
       <div class="flex justify-between items-center mt-6">
@@ -52,7 +52,7 @@
           <i class="fa-solid fa-arrow-left"></i> Back
         </a>
         <button type="submit"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-md shadow">
+                class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-md shadow transition">
           <i class="fa-solid fa-floppy-disk"></i> Save
         </button>
       </div>
