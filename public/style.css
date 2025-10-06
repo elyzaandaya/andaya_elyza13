@@ -3,21 +3,24 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  flex-direction: row;     /* Ensure horizontal layout */
+  flex-wrap: nowrap;       /* Prevent wrapping to next line */
   gap: 16px;
   margin-top: 28px;
   font-family: 'Inter', sans-serif;
+  overflow-x: auto;        /* Allow horizontal scroll if needed */
 }
 
 /* Pagination Buttons */
 .pagination a,
 .pagination span {
   display: inline-block;
+  white-space: nowrap;     /* Prevent text from wrapping */
   padding: 10px 20px;
   border-radius: 9999px;
-  border: 2px solid #3b82f6; /* blue-500 */
+  border: 2px solid #3b82f6;
   background-color: #ffffff;
-  color: #1e3a8a; /* blue-900 */
+  color: #1e3a8a;
   font-weight: 600;
   text-decoration: none;
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.1);
@@ -26,7 +29,7 @@
 
 /* Hover Effect */
 .pagination a:hover {
-  background: linear-gradient(135deg, #3b82f6, #60a5fa); /* blue-500 to blue-400 */
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
   color: white;
   transform: translateY(-2px) scale(1.08);
   box-shadow: 0 0 14px #3b82f6, 0 0 6px #60a5fa;
@@ -34,7 +37,7 @@
 
 /* Active Page */
 .pagination .active {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8); /* blue-600 to blue-700 */
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
   border-color: #2563eb;
   box-shadow: 0 0 14px #2563eb, 0 0 6px #1d4ed8;
@@ -46,7 +49,7 @@
   opacity: 0.4;
   cursor: not-allowed;
   pointer-events: none;
-  background-color: #f3f4f6; /* gray-100 */
-  color: #9ca3af; /* gray-400 */
-  border-color: #e5e7eb; /* gray-200 */
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  border-color: #e5e7eb;
 }
