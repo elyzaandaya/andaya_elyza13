@@ -38,13 +38,13 @@
     <form action="<?=site_url('users/create')?>" method="POST" class="space-y-5">
       <div>
         <label class="block text-pink-700 mb-1 font-bold">First Name</label>
-        <input type="text" name="fname" required placeholder="enter first name"
+        <input type="text" name="first_name" required placeholder="enter first name"
                class="w-full px-4 py-3 border-2 border-pink-300 rounded-xl focus:ring-4 focus:ring-pink-400 shadow-sm placeholder:text-pink-400 placeholder:italic">
       </div>
 
       <div>
         <label class="block text-pink-700 mb-1 font-bold">Last Name</label>
-        <input type="text" name="lname" required placeholder="enter last name"
+        <input type="text" name="last_name" required placeholder="enter last name"
                class="w-full px-4 py-3 border-2 border-pink-300 rounded-xl focus:ring-4 focus:ring-pink-400 shadow-sm placeholder:text-pink-400 placeholder:italic">
       </div>
 

@@ -55,8 +55,8 @@ class UsersController extends Controller {
     function create(){
         if($this->io->method() == 'post'){
             $data = [
-                'fname' => $this->io->post('fname'),
-                'lname'  => $this->io->post('lname'),
+                'fname' => $this->io->post('first_name'),
+                'lname'  => $this->io->post('last_name'),
                 'email'      => $this->io->post('email')
             ];
 
@@ -80,8 +80,8 @@ class UsersController extends Controller {
 
         if($this->io->method() == 'post'){
             $data = [
-                'fname' => $this->io->post('fname'),
-                'lname'  => $this->io->post('lname'),
+                'first_name' => $this->io->post('first_name'),
+                'last_name'  => $this->io->post('last_name'),
                 'email'      => $this->io->post('email')
             ];
 
