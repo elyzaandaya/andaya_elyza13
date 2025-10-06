@@ -11,10 +11,10 @@
 
   <style>
     body { 
-      font-family: 'Baloo 2', cursive; 
+      font-family: 'Baloo 2', arial_narrow; 
       background: linear-gradient(135deg, #ddf4dbff, #e7fcecff, #d1f1d2ff, #d9fbceff);
     }
-    .font-title { font-family: 'Pacifico', cursive; }
+    .font-title { font-family: 'Pacifico', araial_narrow; }
     .btn-hover:hover { 
       transform: scale(1.07) rotate(-1deg); 
       box-shadow: 0 0 15px #64f581ff, 0 0 25px #89f56bff; 

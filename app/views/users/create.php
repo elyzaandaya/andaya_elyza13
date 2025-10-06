@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
-      font-family: 'Baloo 2', ArialNarrow;
+      font-family: 'Baloo 2', arial_narrow;
       background: linear-gradient(135deg, #ddf4dbff, #e7fcecff, #d1f1d2ff, #d9fbceff);
     }
     .font-title {
-      font-family: 'Pacifico', cursive;
+      font-family: 'Pacifico', arial_narrow;
     }
     .btn-hover:hover {
       transform: scale(1.07) rotate(-1deg);
