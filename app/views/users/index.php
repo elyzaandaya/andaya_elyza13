@@ -5,111 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Directory</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="<?=base_url();?>/public/style.css">
-
   <style>
-    body { 
-      font-family: 'Baloo 2', arial_narrow; 
-      background: linear-gradient(135deg, #ddf4dbff, #e7fcecff, #d1f1d2ff, #d9fbceff);
-    }
-    .font-title { font-family: 'Pacifico', araial_narrow; }
-    .btn-hover:hover { 
-      transform: scale(1.07) rotate(-1deg); 
-      box-shadow: 0 0 15px #64f581ff, 0 0 25px #89f56bff; 
-    }
-    table thead tr { background: linear-gradient(90deg, #47ec5aff, #28f358ff, #0cf10cff); }
-    .hp-page { 
-      padding: 6px 12px; 
-      background: #208cf1ff; 
-      border-radius: 9999px; 
-      color: white; 
-      font-weight: bold; 
-      transition: 0.3s; 
-    }
-    .hp-page:hover { background: #06f666ff; transform: scale(1.1); }
-    .hp-current { 
-      padding: 6px 12px; 
-      background: #038031ff; 
-      border-radius: 9999px; 
-      color: white; 
-      font-weight: bold; 
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
     }
   </style>
 </head>
 <body class="min-h-screen">
 
   <!-- Header -->
-  <nav class="bg-gradient-to-r from-pink-400 via-fuchsia-500 to-purple-500 shadow-lg border-b-4 border-pink-300">
+  <nav class="bg-white shadow-md border-b">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="text-white font-title text-3xl flex items-center gap-2">
-        <i class="fa-solid fa-sparkles"></i> Student Directory 💖
+      <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="fa-solid fa-graduation-cap text-blue-500"></i> Student Directory
       </h1>
     </div>
   </nav>
 
   <!-- Content -->
   <div class="max-w-6xl mx-auto mt-10 px-4">
-    <div class="bg-white shadow-2xl rounded-3xl p-6 border-4 border-pink-200">
+    <div class="bg-white shadow-xl rounded-2xl p-6 border border-blue-200">
 
       <!-- Top Actions -->
-      <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-
+      <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <!-- Search Bar -->
-        <form method="get" action="<?=site_url()?>" class="flex">
+        <form method="get" action="<?=site_url()?>" class="flex w-full md:w-auto">
           <input 
             type="text" 
             name="q" 
             value="<?=html_escape($_GET['q'] ?? '')?>" 
-            placeholder="🔍 Search student..." 
-            class="px-4 py-2 border-2 border-pink-300 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 w-64 bg-pink-50 placeholder-gray-400">
-          <button type="submit" class="bg-pink-400 hover:bg-pink-500 text-white px-4 py-2 rounded-r-2xl shadow transition-all duration-300">
+            placeholder="Search by name or email..." 
+            class="px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 w-full md:w-64 bg-gray-100">
+          <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r-md">
             <i class="fa fa-search"></i>
           </button>
         </form>
 
         <!-- Add Button -->
-        <a href="<?=site_url('users/create')?>"
-           class="btn-hover inline-flex items-center gap-2 bg-gradient-to-r from-pink-400 to-fuchsia-500 text-white font-bold px-5 py-2 rounded-2xl shadow-md transition-all duration-300">
+        <a href="<?=site_url('users/create')?>" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-md shadow">
           <i class="fa-solid fa-user-plus"></i> Add Student
         </a>
       </div>
 
       <!-- Table -->
-      <div class="overflow-x-auto rounded-3xl border-4 border-pink-200 shadow-md">
-        <table class="w-full text-center border-collapse">
-          <thead>
-            <tr class="text-white uppercase tracking-wider text-lg">
-              <th class="py-3 px-4">ID</th>
-              <th class="py-3 px-4">Lastname</th>
-              <th class="py-3 px-4">Firstname</th>
+      <div class="overflow-x-auto rounded-xl border border-blue-200 shadow">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-blue-500 text-white">
+            <tr>
+              <th class="py-3 px-4">#</th>
+              <th class="py-3 px-4">Full Name</th>
               <th class="py-3 px-4">Email</th>
-              <th class="py-3 px-4">Action</th>
+              <th class="py-3 px-4 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody class="text-gray-700 text-base">
+          <tbody class="text-gray-700">
             <?php if(!empty($users)): ?>
               <?php foreach(html_escape($users) as $user): ?>
-                <tr class="hover:bg-pink-100 transition duration-200">
-                  <td class="py-3 px-4 font-medium"><?=($user['id']);?></td>
-                  <td class="py-3 px-4"><?=($user['first_name']);?></td>
-                  <td class="py-3 px-4"><?=($user['last_name']);?></td>
+                <tr class="border-b hover:bg-blue-50">
+                  <td class="py-3 px-4"><?=($user['id']);?></td>
+                  <td class="py-3 px-4"><?=($user['first_name'] . ' ' . $user['last_name']);?></td>
                   <td class="py-3 px-4"><?=($user['email']);?></td>
-                  <td class="py-3 px-4 flex justify-center gap-3">
-                    <a href="<?=site_url('users/update/'.$user['id']);?>"
-                       class="btn-hover bg-green-400 hover:bg-green-500 text-white px-3 py-1 rounded-xl shadow flex items-center gap-1">
-                      <i class="fa-solid fa-pen-to-square"></i> Update
+                  <td class="py-3 px-4 flex justify-center gap-2">
+                    <a href="<?=site_url('users/update/'.$user['id']);?>" class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md">
+                      <i class="fa-solid fa-pen"></i>
                     </a>
-                    <a href="<?=site_url('users/delete/'.$user['id']);?>"
-                       class="btn-hover bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-xl shadow flex items-center gap-1">
-                      <i class="fa-solid fa-trash"></i> Delete
+                    <a href="<?=site_url('users/delete/'.$user['id']);?>" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md">
+                      <i class="fa-solid fa-trash"></i>
                     </a>
                   </td>
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>
-              <tr><td colspan="5" class="py-4 text-gray-500">No students found 😿</td></tr>
+              <tr><td colspan="4" class="py-4 text-center text-gray-500">No students found.</td></tr>
             <?php endif; ?>
           </tbody>
         </table>
@@ -117,14 +87,14 @@
 
       <!-- Pagination -->
       <div class="mt-6 flex justify-center">
-        <div class="pagination flex space-x-2">
+        <div class="flex gap-2">
           <?php
             if (!empty($page)) {
               echo str_replace(
                 ['<a ', '<strong>', '</strong>'],
                 [
-                  '<a class="hp-page"',     
-                  '<span class="hp-current">',  
+                  '<a class="px-3 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"',
+                  '<span class="px-3 py-1 bg-gray-800 text-white rounded-full">',
                   '</span>'
                 ],
                 $page

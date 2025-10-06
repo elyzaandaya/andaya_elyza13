@@ -5,60 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Update Student</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
-      font-family: 'Baloo 2', arial_narrow;
-      background: linear-gradient(135deg, #b0efaaff, #9df1b1ff, #97ea9aff, #9dec82ff);
-    }
-    .font-title {
-      font-family: 'Pacifico', arial_narrow;
-    }
-    .btn-hover:hover {
-      transform: scale(1.07) rotate(-1deg);
-      box-shadow: 0 0 15px #64f581ff, 0 0 25px #89f56bff;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
     }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center">
+<body class="min-h-screen flex items-center justify-center px-4">
 
-  <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md border-4 border-pink-200">
+  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg border border-blue-200">
 
     <!-- Header -->
-    <div class="flex flex-col items-center mb-6">
-      <div class="bg-gradient-to-br from-fuchsia-500 to-pink-400 rounded-full p-5 shadow-md animate-pulse">
-        <i class="fa-solid fa-wand-magic-sparkles text-white text-4xl"></i>
+    <div class="text-center mb-6">
+      <div class="inline-block bg-blue-100 p-4 rounded-full shadow-sm">
+        <i class="fa-solid fa-user-pen text-blue-600 text-3xl"></i>
       </div>
-      <h2 class="font-title text-3xl text-pink-600 mt-3 drop-shadow-lg">Update Information ✨</h2>
-      <p class="text-sm text-fuchsia-600 mt-1">Give your student profile a glow-up 🌸</p>
+      <h2 class="text-2xl font-semibold text-blue-700 mt-3">Update Student Info</h2>
+      <p class="text-sm text-gray-500">Make sure everything’s up to date 📘</p>
     </div>
 
     <!-- Form -->
     <form action="<?=site_url('users/update/'.$user['id'])?>" method="POST" class="space-y-5">
       <div>
-        <label class="block text-pink-700 mb-1 font-bold">First Name</label>
+        <label class="block text-sm font-medium text-gray-700">First Name</label>
         <input type="text" name="first_name" value="<?= html_escape($user['first_name'])?>" required
-               class="w-full px-4 py-3 border-2 border-pink-300 rounded-xl focus:ring-4 focus:ring-pink-400 shadow-sm placeholder:text-pink-400 placeholder:italic">
+               class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
       </div>
 
       <div>
-        <label class="block text-pink-700 mb-1 font-bold">Last Name</label>
+        <label class="block text-sm font-medium text-gray-700">Last Name</label>
         <input type="text" name="last_name" value="<?= html_escape($user['last_name'])?>" required
-               class="w-full px-4 py-3 border-2 border-pink-300 rounded-xl focus:ring-4 focus:ring-pink-400 shadow-sm placeholder:text-pink-400 placeholder:italic">
+               class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
       </div>
 
       <div>
-        <label class="block text-pink-700 mb-1 font-bold">Email</label>
+        <label class="block text-sm font-medium text-gray-700">Email</label>
         <input type="email" name="email" value="<?= html_escape($user['email'])?>" required
-               class="w-full px-4 py-3 border-2 border-pink-300 rounded-xl focus:ring-4 focus:ring-pink-400 shadow-sm placeholder:text-pink-400 placeholder:italic">
+               class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
       </div>
 
-      <button type="submit"
-              class="btn-hover w-full bg-gradient-to-r from-pink-400 to-fuchsia-500 text-white font-bold py-3 rounded-xl shadow-xl transition transform hover:scale-105">
-         <i class="fa-solid fa-wand-sparkles"></i> Update
-      </button>
+      <div class="flex justify-between items-center mt-6">
+        <a href="<?=site_url('/')?>" class="text-sm text-gray-600 hover:text-blue-500 flex items-center gap-1">
+          <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-md shadow">
+          <i class="fa-solid fa-floppy-disk"></i> Save
+        </button>
+      </div>
     </form>
   </div>
+
 </body>
 </html>
