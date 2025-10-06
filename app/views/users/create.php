@@ -47,12 +47,13 @@
                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-gray-50">
       </div>
 
-      <div class="flex justify-between items-center mt-6">
-        <a href="<?=site_url('/')?>" class="text-sm text-gray-600 hover:text-green-500 flex items-center gap-1">
+      <!-- Action Buttons -->
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="<?=site_url('/')?>" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition">
           <i class="fa-solid fa-arrow-left"></i> Back
         </a>
         <button type="submit"
-                class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-md shadow transition">
+                class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full shadow transition">
           <i class="fa-solid fa-plus"></i> Enroll
         </button>
       </div>

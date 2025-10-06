@@ -86,8 +86,8 @@
       </div>
 
       <!-- Pagination -->
-      <div class="mt-6 flex justify-center">
-        <div class="flex gap-2">
+      <div class="mt-8 flex justify-center">
+        <div class="flex flex-wrap gap-3">
           <?php
             if (!empty($page)) {
               echo str_replace(
