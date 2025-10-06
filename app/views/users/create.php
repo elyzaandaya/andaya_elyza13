@@ -9,15 +9,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
-      font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #ffe4e6, #fce7f3, #ede9fe, #dbeafe);
+      font-family: 'Baloo 2', ArialNarrow;
+      background: linear-gradient(135deg, #ddf4dbff, #e7fcecff, #d1f1d2ff, #d9fbceff);
     }
     .font-title {
       font-family: 'Pacifico', cursive;
     }
     .btn-hover:hover {
       transform: scale(1.07) rotate(-1deg);
-      box-shadow: 0 0 15px #ff99cc, 0 0 25px #ffccff;
+      box-shadow: 0 0 15px #64f581ff, 0 0 25px #89f56bff; 
     }
   </style>
 </head>
